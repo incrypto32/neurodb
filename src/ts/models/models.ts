@@ -1,4 +1,13 @@
 export interface Restaurant {
+  id: string;
+  name: string;
+  sex: string;
+  
+
+}
+
+
+export interface Restaurant {
     id: string;
     name: string;
     closed: boolean;
