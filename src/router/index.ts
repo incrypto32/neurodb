@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Main from '../views/Main.vue'
 import Home from '../views/Home.vue'
+import NewPatient from '../views/NewPatient.vue'
 import Login from '../views/Login.vue'
 import Meals from '../views/Meals.vue'
 import Order from '../views/Order.vue'
@@ -19,6 +20,7 @@ const routes: Array<RouteConfig> = [
         name: 'home',
         component: Home
       },
+
       {
         path: '/meals/:rid',
         name: 'meals',
@@ -26,9 +28,19 @@ const routes: Array<RouteConfig> = [
       },
     
       {
-        path: '/orders',
-        name: 'orders',
-        component: Order
+        path: '/patients',
+        name: 'patients',
+        children:[
+  
+          {
+            path: 'add',
+            name: 'newpatient',
+            component:NewPatient,
+          },
+
+   
+        ],
+        component: NewPatient
       },
       {
         path: '/about',
