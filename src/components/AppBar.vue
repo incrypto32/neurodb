@@ -10,11 +10,11 @@
       <span class="mr-2">Home</span>
     </v-btn>
 
-    <v-btn to="/orders" text>
+    <v-btn  text>
       <span class="mr-2">All Patients</span>
     </v-btn>
 
-    <v-btn to="/orders" text>
+    <v-btn text>
       <span class="mr-2">Add Patient</span>
     </v-btn>
   </v-app-bar>

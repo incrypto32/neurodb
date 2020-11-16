@@ -3,9 +3,9 @@ import VueRouter, { RouteConfig } from 'vue-router'
 import Main from '../views/Main.vue'
 import Home from '../views/Home.vue'
 import NewPatient from '../views/NewPatient.vue'
+import VitalsForm from '../views/VitalsForm.vue'
 import Login from '../views/Login.vue'
 import Meals from '../views/Meals.vue'
-import Order from '../views/Order.vue'
 import { fire } from '@/ts/firebase_helper'
 
 Vue.use(VueRouter)
@@ -28,19 +28,15 @@ const routes: Array<RouteConfig> = [
       },
     
       {
-        path: '/patients',
+        path: '/patients/add',
         name: 'patients',
-        children:[
-  
-          {
-            path: 'add',
-            name: 'newpatient',
-            component:NewPatient,
-          },
+        component:NewPatient,
+      },
 
-   
-        ],
-        component: NewPatient
+      {
+        path:  '/patients/vitals',
+        name: 'vitals',
+        component:VitalsForm,
       },
       {
         path: '/about',
