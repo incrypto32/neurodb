@@ -34,9 +34,19 @@ const routes: Array<RouteConfig> = [
       },
 
       {
+        path: '/patients/edit/:id',
+        name: 'patients',
+        component:NewPatient,
+        props:{
+          edit:true
+        },
+      },
+
+      {
         path:  '/patients/vitals',
         name: 'vitals',
         component:VitalsForm,
+        
       },
       {
         path: '/about',

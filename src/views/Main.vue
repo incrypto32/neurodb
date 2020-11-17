@@ -20,12 +20,6 @@ export default Vue.extend({
     AppBar,
   },
 
-  mounted: () => {
-    console.log("mounted boi ..!!");
-  },
 
-  data: () => ({
-    //
-  }),
 });
 </script>

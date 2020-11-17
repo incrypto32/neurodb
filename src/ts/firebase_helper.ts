@@ -2,16 +2,14 @@ import router from '@/router';
 import firebase from 'firebase/app';
 import {firebaseConfig} from './configs/firebase'
 import 'firebase/auth'
+import { FireStoreHelper } from './services/firestore';
 // import 'firebase/app'
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 
-firebase.initializeApp(firebaseConfig)
+export const app = firebase.initializeApp(firebaseConfig)
 
-export class Fire {
-
-
-
+export class FireAuth {
     auth = firebase.auth()
     sessionPersistence=     firebase.auth.Auth.Persistence.SESSION
 
@@ -42,7 +40,8 @@ export class Fire {
 
 }
 
-export const fire = new Fire()
+export const fire = new FireAuth()
+export const store=new FireStoreHelper(app)
 fire.auth.setPersistence(fire.sessionPersistence)
 
 
