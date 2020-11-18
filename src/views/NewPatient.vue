@@ -486,6 +486,9 @@ export default class Home extends Vue {
   }
 
   async submit(save=false) {
+    if(this.loading){
+      return
+    }
     this.submitLoading = true;
     try {
       if (!this.edit) {
