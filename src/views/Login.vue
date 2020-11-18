@@ -4,7 +4,7 @@
     <v-card class="pa-5">
       <v-card-title  primary-title class="justify-center"> 
           
-          LOGIN </v-card-title>
+          Neuro DB Login </v-card-title>
     <v-form @submit.prevent="login">
       <v-card-text>
       
@@ -31,7 +31,8 @@
 
       <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green" type="submit">  <span class="white--text">LOGIN</span></v-btn>
+          <v-btn color="primary" type="submit">  <span class="white--text">LOGIN</span></v-btn>
+          <v-spacer></v-spacer>
       </v-card-actions>
 
       </v-form>
@@ -70,7 +71,8 @@ export default class Login extends Vue{
 </script>
 <style lang="scss" scoped>
 .bg{
-    background-color: rgb(16, 190, 109);
+   background: rgb(92,113,208);
+background: linear-gradient(90deg, rgba(92,113,208,1) 5%, rgba(11,91,179,1) 49%, rgba(22,115,138,1) 100%); 
     height: 100vh;
 }
 </style>

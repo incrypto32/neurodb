@@ -415,7 +415,7 @@
             <h3>Save</h3>
           </v-btn>
 
-          <v-btn v-if="edit" value="recent">
+          <v-btn v-if="edit"  v-on:click="submit()">
             <h3>Next</h3>
           </v-btn>
 
@@ -436,6 +436,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 @Component({})
 export default class Home extends Vue {
+
   @Prop({
     type: Boolean,
     default: false,
@@ -491,7 +492,7 @@ export default class Home extends Vue {
         const id = await store.addPatient(this.patient);
         console.log(id);
         if (id) {
-          this.$router.replace({ path: `/edit/${id}` });
+          this.$router.replace({ path: `/patients/edit/${id}` });
         }
       } else {
         const success = await store.editPatient(
@@ -502,7 +503,7 @@ export default class Home extends Vue {
           if (save) {
             this.showMessage("Successfully saved");
           }else{
-            this.$router.push({path:"/patients/vitals"})
+            this.$router.push({path:`/patients/vitals/${this.$route.params.id}`})
           }
         }
       }

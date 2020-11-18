@@ -8,7 +8,7 @@
 
 
     <v-row justify="center">
-      <v-btn color="secondary" outlined rounded class="pa-10 my-5" width="75%">
+      <v-btn color="secondary" outlined rounded class="pa-10 my-5" width="75%" to="/patients/all">
         View All Patients
       </v-btn>
     </v-row>

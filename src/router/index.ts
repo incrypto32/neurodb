@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Main from "../views/Main.vue";
 import Home from "../views/Home.vue";
 import NewPatient from "../views/NewPatient.vue";
+import Success from "../views/Success.vue";
 import VitalsForm from "../views/VitalsForm.vue";
 import Login from "../views/Login.vue";
 import Meals from "../views/Meals.vue";
@@ -21,28 +22,28 @@ const routes: Array<RouteConfig> = [
       },
 
       {
-        path: "/meals/:rid",
-        name: "meals",
+        path: "/patients/all",
+        name: "patients",
         component: Meals,
       },
 
       {
         path: "/patients/add",
-        name: "patients",
+        name: "AddPatient",
         component: NewPatient,
       },
 
 
       {
-        path: "/patients/success",
-        name: "patients",
-        component: NewPatient,
+        path: "/patients/success/:id",
+        name: "success",
+        component: Success,
       },
 
 
       {
         path: "/patients/edit/:id",
-        name: "patients",
+        name: "EditPatient",
         component: NewPatient,
         props: {
           edit: true,
@@ -51,7 +52,7 @@ const routes: Array<RouteConfig> = [
 
       {
         path: "/patients/vitals/:id",
-        name: "patients",
+        name: "vitals",
         component: VitalsForm,
         props: {
           edit: true,

@@ -227,15 +227,13 @@
         <v-bottom-navigation fixed app>
           <v-spacer></v-spacer>
 
-          <v-btn value="recent" v-on:click="submit">
+          <v-btn value="recent" v-on:click="submit(true)">
             <h3>Save</h3>
           </v-btn>
-          <v-btn value="recent">
+          <v-btn value="recent"  v-on:click="submit()" >
             <h3>Next</h3>
           </v-btn>
-          <v-btn value="recent" v-on:click="onClick">
-            <h3>Blah</h3>
-          </v-btn>
+     
         </v-bottom-navigation>
       </div>
     </div>
@@ -313,7 +311,7 @@ export default class VitalForm extends Vue {
           if (save) {
             this.showMessage("Successfully saved");
           } else {
-            this.$router.push({ path: `/patients/success/${this.$route.params.id}` });
+            this.$router.push({ path: `/patients/success/${this.$route.params.id}`});
           }
         }
       

@@ -1,4 +1,4 @@
-import firebase from "firebase";
+import firebase from 'firebase/app'
 import "firebase/firestore";
 
 import { Patient, PatientInterface } from "../models/models";
@@ -22,13 +22,13 @@ export class FireStoreHelper {
   async editPatient(id: string, patient: Patient): Promise<boolean> {
     try {
       await this.patients.doc(id).update(Object.assign({}, patient));
-      return true
+      return true;
     } catch (error) {
-      console.log(error)
-      return false
+      console.log(error);
+      return false;
     }
- 
   }
+
   async getPatient(id: string): Promise<PatientInterface> {
     const doc = await this.patients.doc(id).get();
     const patient = doc.data() as PatientInterface;
@@ -37,5 +37,31 @@ export class FireStoreHelper {
     } else {
       throw "Patient does not exist";
     }
+  }
+
+  async getAllPatients(): Promise<Array<PatientInterface>> {
+    const patients: Array<PatientInterface> = [];
+
+    const snap = await this.patients.get();
+
+    snap.docs.forEach((doc) => {
+      const patient=doc.data()
+      patient.id=doc.id
+      patients.push(patient as PatientInterface);
+    });
+    console.log(JSON.stringify(patients))
+
+    return patients;
+  }
+
+  async deletePatient(id: string): Promise<boolean>{
+    try {
+      await this.patients.doc(id).delete()
+      return true
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+   
   }
 }
