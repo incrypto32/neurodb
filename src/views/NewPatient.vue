@@ -68,39 +68,29 @@
               </v-col>
 
               <v-col cols="12" md="6" class="py-0 px-3">
-                <v-dialog
-                  ref="dialog"
+                <v-menu
                   v-model="modal"
-                  :return-value.sync="patient.date"
-                  persistent
-                  width="290px"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="290px"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="patient.date"
-                      label="Date"
+                      v-model="pickedDate"
+                      label="Picker without buttons"
                       prepend-icon="mdi-calendar"
                       readonly
-                      outlined
-                      dense
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="patient.date" scrollable>
-                    <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="modal = false">
-                      Cancel
-                    </v-btn>
-                    <v-btn
-                      text
-                      color="primary"
-                      @click="$refs.dialog.save(patient.date)"
-                    >
-                      OK
-                    </v-btn>
-                  </v-date-picker>
-                </v-dialog>
+                  <v-date-picker
+                    v-model="date"
+                    @input="modal = false"
+                  ></v-date-picker>
+                </v-menu>
               </v-col>
             </v-row>
 
@@ -411,14 +401,13 @@
           </v-col>
 
           <v-spacer></v-spacer>
-          <v-btn  v-on:click="submit(true)">
+          <v-btn v-on:click="submit(true)">
             <h3>Save</h3>
           </v-btn>
 
-          <v-btn v-if="edit"  v-on:click="submit()">
+          <v-btn v-if="edit" v-on:click="submit()">
             <h3>Next</h3>
           </v-btn>
-
         </v-bottom-navigation>
       </template>
     </div>
@@ -436,7 +425,6 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 @Component({})
 export default class Home extends Vue {
-
   @Prop({
     type: Boolean,
     default: false,
@@ -452,6 +440,19 @@ export default class Home extends Vue {
   loading = true;
   submitLoading = false;
   nameRules = [(v: any) => !!v || "field is required"];
+  pickedDate = "";
+
+  get date(): string {
+   return this.pickedDate??"";
+
+  }
+
+  set date(date: string) {
+    console.log(date, "++++");
+    this.patient.date = new Date(date);
+    this.pickedDate = date;
+    console.log(this.patient.date);
+  }
 
   async created() {
     console.log("Created called");
@@ -485,9 +486,9 @@ export default class Home extends Vue {
     console.log(JSON.stringify(this.patient));
   }
 
-  async submit(save=false) {
-    if(this.loading){
-      return
+  async submit(save = false) {
+    if (this.loading) {
+      return;
     }
     this.submitLoading = true;
     try {
@@ -505,8 +506,10 @@ export default class Home extends Vue {
         if (success) {
           if (save) {
             this.showMessage("Successfully saved");
-          }else{
-            this.$router.push({path:`/patients/vitals/${this.$route.params.id}`})
+          } else {
+            this.$router.push({
+              path: `/patients/vitals/${this.$route.params.id}`,
+            });
           }
         }
       }

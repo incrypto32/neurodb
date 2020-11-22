@@ -4,10 +4,10 @@ export interface PatientInterface {
   sex: string;
   age: number;
   room: string;
-  date: string;
+  date: Date;
   address: string;
   phone: string;
-
+  currentMedication: string;
   diagnosis: {
     pd1?: string;
     pd2?: string;
@@ -40,7 +40,6 @@ export interface PatientInterface {
     otherRemarks?: string;
   };
 
-  currentMedication: string;
 
   vitals: {
     bp?: string;
@@ -74,7 +73,7 @@ export class Patient implements PatientInterface {
   sex!: string;
   age!: number;
   room!: string;
-  date!: string;
+  date!: Date;
   address!: string;
   phone!: string;
 
