@@ -3,6 +3,7 @@ import firebase from 'firebase/app';
 import {firebaseConfig} from './configs/firebase'
 import 'firebase/auth'
 import { FireStoreHelper } from './services/firestore';
+import { FireStorageHelper } from './services/firebase_storage';
 // import 'firebase/app'
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
@@ -42,6 +43,7 @@ export class FireAuth {
 
 export const fire = new FireAuth()
 export const store=new FireStoreHelper(app)
+export const storage =new FireStorageHelper(app)
 fire.auth.setPersistence(fire.sessionPersistence)
 
 

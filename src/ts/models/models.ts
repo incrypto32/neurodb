@@ -1,13 +1,18 @@
 export interface PatientInterface {
   id: string;
+  opid: string;
   name: string;
   sex: string;
   age: number;
   room: string;
-  date: Date;
+  date: any;
+  entryDate: any;
   address: string;
   phone: string;
+  alternatePhone: string;
   currentMedication: string;
+  inPatient: boolean;
+
   diagnosis: {
     pd1?: string;
     pd2?: string;
@@ -16,10 +21,13 @@ export interface PatientInterface {
     icd?: string;
   };
 
+
   presentHistory: {
     ph1: { description?: string; duration?: string };
     ph2: { description?: string; duration?: string };
     ph3: { description?: string; duration?: string };
+    ph4: { description?: string; duration?: string };
+    ph5: { description?: string; duration?: string };
   };
 
   pastHistory: {
@@ -38,6 +46,7 @@ export interface PatientInterface {
     bowelBladderHistory?: string;
     familyHistory?: string;
     otherRemarks?: string;
+    tobaccoChewing?: string;
   };
 
 
@@ -60,22 +69,26 @@ export interface PatientInterface {
   cranialNerve: {
     motorSystem?: string;
     sensorySystem?: string;
-    cerebralSign?: string;
-    menengialSign?: string;
-    periferalNerves?: string;
+    cerebellarSign?: string;
+    menengealSign?: string;
+    peripheralNerves?: string;
     skullAndSpine?: string;
   };
 }
 
 export class Patient implements PatientInterface {
   id!: string;
+  opid!: string;
   name!: string;
   sex!: string;
   age!: number;
   room!: string;
-  date!: Date;
+  date!: any;
+  entryDate!: any;
   address!: string;
   phone!: string;
+  alternatePhone!: string;
+  inPatient!: boolean;
 
 
   diagnosis: {
@@ -90,6 +103,8 @@ export class Patient implements PatientInterface {
     ph1: { description?: string; duration?: string };
     ph2: { description?: string; duration?: string };
     ph3: { description?: string; duration?: string };
+    ph4: { description?: string; duration?: string };
+    ph5: { description?: string; duration?: string };
   };
  
   pastHistory: {
@@ -106,6 +121,8 @@ export class Patient implements PatientInterface {
       ph1:{},
       ph2:{},
       ph3:{},
+      ph4:{},
+      ph5:{}
     };
     this.pastHistory={};
     this.personalHistory={};
@@ -114,6 +131,8 @@ export class Patient implements PatientInterface {
     this.cranialNerve={};
  
   }
+
+
   personalHistory: {
     currentSmoker?: boolean;
     exSmoker?: boolean;
@@ -122,6 +141,7 @@ export class Patient implements PatientInterface {
     bowelBladderHistory?: string;
     familyHistory?: string;
     otherRemarks?: string;
+    tobaccoChewing?: string;
   };
 
   currentMedication!: string;
@@ -145,84 +165,9 @@ export class Patient implements PatientInterface {
   cranialNerve: {
     motorSystem?: string;
     sensorySystem?: string;
-    cerebralSign?: string;
-    menengialSign?: string;
-    preiferalNerves?: string;
+    cerebellarSign?: string;
+    menengealSign?: string;
+    peripheralNerves?: string;
     skullAndSpine?: string;
   };
 }
-
-export interface Restaurant {
-  id: string;
-  name: string;
-  closed: boolean;
-  type: string;
-  phone: string;
-  locationUrl: string;
-  location: any;
-  email: string;
-  logo: string;
-  address: string;
-}
-
-export interface Order {
-  id: string;
-  rid: string;
-  uid: string;
-  address: Address;
-  items: Map<string, number>;
-  meals: Array<Meal>;
-  summary: Array<Summary>;
-  user: User;
-  restaurant: Restaurant;
-  time: any;
-  price: number;
-  total: number;
-  deliveryCharge: number;
-  status: string;
-  statusCode: number;
-}
-
-export interface User {
-  id: string;
-  uid: string;
-  name: string;
-  phone: string;
-  email: string;
-  address: Map<string, Address>;
-}
-
-export interface Address {
-  place: PlaceInfo;
-  title: string;
-  zone: string;
-  adl2: string;
-  adl3: string;
-  adl4: string;
-}
-
-export interface PlaceInfo {
-  name: string;
-  details: string;
-  latitude: number;
-  longitude: number;
-}
-
-export interface Summary {
-  meal: Meal;
-  count: number;
-  price: number;
-}
-
-export interface Meal {
-  id: string;
-  rid: string;
-  name: string;
-  available: boolean;
-  spice: boolean;
-  special: boolean;
-  price: number;
-  strikedPrice: number;
-}
-
-export type VForm = Vue & any;

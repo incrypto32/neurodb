@@ -11,14 +11,23 @@
 
     <div v-else>
       <v-row justify="center" class="ma-3">
-        <h2>
-          Add New Patient
-        </h2>
+        <h2>Add New Patient</h2>
       </v-row>
 
       <template>
         <v-form v-model="valid">
           <v-container>
+            <v-row>
+              <v-text-field
+                v-model="patient.opid"
+                :rules="nameRules"
+                outlined
+                dense
+                class="pa-0"
+                label="OP ID"
+                required
+              ></v-text-field>
+            </v-row>
             <v-row>
               <v-col cols="12" md="4" class="py-0 px-3">
                 <v-text-field
@@ -33,19 +42,29 @@
               </v-col>
 
               <v-col cols="12" md="2" class="py-0 px-3">
-                <v-text-field
+                <!-- <v-text-field
                   v-model="patient.sex"
                   :rules="nameRules"
                   outlined
                   dense
                   label="Sex"
                   required
-                ></v-text-field>
+                ></v-text-field> -->
+                <v-select
+                  :items="sex"
+                  v-model="patient.sex"
+                  item-value="code"
+                  item-text="title"
+                  outlined
+                  dense
+                  label="Sex"
+                  :rules="nameRules"
+                ></v-select>
               </v-col>
 
               <v-col cols="12" md="2" class="py-0 px-3">
                 <v-text-field
-                  v-model="patient.age"
+                  v-model.number="patient.age"
                   :rules="nameRules"
                   outlined
                   dense
@@ -79,8 +98,9 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="pickedDate"
-                      label="Picker without buttons"
+                      label="Date"
                       prepend-icon="mdi-calendar"
+                      :rules="nameRules"
                       readonly
                       v-bind="attrs"
                       v-on="on"
@@ -118,13 +138,24 @@
               </v-col>
             </v-row>
 
+            <v-row>
+              <v-col cols="12" md="4" class="py-0 px-3">
+                <v-text-field
+                  v-model="patient.alternatePhone"
+                  outlined
+                  dense
+                  label="Alternate Phone"
+
+                ></v-text-field>
+              </v-col>
+            </v-row>
+
             <v-container class="pa-4"></v-container>
 
             <v-row>
               <v-col cols="12" md="4" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.diagnosis.pd1"
-                  :rules="nameRules"
                   outlined
                   dense
                   label="Provisional Diagnosis 1"
@@ -137,7 +168,6 @@
               <v-col cols="12" md="4" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.diagnosis.pd2"
-                  :rules="nameRules"
                   outlined
                   dense
                   label="Provisional Diagnosis 2"
@@ -150,7 +180,6 @@
               <v-col cols="12" md="4" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.diagnosis.pd3"
-                  :rules="nameRules"
                   outlined
                   dense
                   label="Provisional Diagnosis 3"
@@ -165,7 +194,6 @@
               <v-col cols="12" md="4" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.diagnosis.final"
-                  :rules="nameRules"
                   outlined
                   dense
                   label="Final Diagnosis"
@@ -178,7 +206,6 @@
               <v-col cols="12" md="4" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.diagnosis.icd"
-                  :rules="nameRules"
                   outlined
                   dense
                   label="ICD - Coding"
@@ -197,7 +224,6 @@
               <v-col cols="12" md="4" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.presentHistory.ph1.description"
-                  :rules="nameRules"
                   outlined
                   dense
                   label="Present History"
@@ -208,7 +234,6 @@
               <v-col cols="12" md="2" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.presentHistory.ph1.duration"
-                  :rules="nameRules"
                   outlined
                   dense
                   label="Duration"
@@ -221,7 +246,6 @@
               <v-col cols="12" md="4" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.presentHistory.ph2.description"
-                  :rules="nameRules"
                   outlined
                   dense
                   label="Present History"
@@ -232,7 +256,6 @@
               <v-col cols="12" md="2" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.presentHistory.ph2.duration"
-                  :rules="nameRules"
                   outlined
                   dense
                   label="Duration"
@@ -245,7 +268,6 @@
               <v-col cols="12" md="4" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.presentHistory.ph3.description"
-                  :rules="nameRules"
                   outlined
                   dense
                   label="Present History"
@@ -256,7 +278,50 @@
               <v-col cols="12" md="2" class="py-0 px-3">
                 <v-text-field
                   v-model="patient.presentHistory.ph3.duration"
-                  :rules="nameRules"
+                  outlined
+                  dense
+                  label="Duration"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="12" md="4" class="py-0 px-3">
+                <v-text-field
+                  v-model="patient.presentHistory.ph4.description"
+                  outlined
+                  dense
+                  label="Present History"
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12" md="2" class="py-0 px-3">
+                <v-text-field
+                  v-model="patient.presentHistory.ph4.duration"
+                  outlined
+                  dense
+                  label="Duration"
+                  required
+                ></v-text-field>
+              </v-col>
+            </v-row>
+
+            <v-row>
+              <v-col cols="12" md="4" class="py-0 px-3">
+                <v-text-field
+                  v-model="patient.presentHistory.ph5.description"
+                  outlined
+                  dense
+                  label="Present History"
+                  required
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12" md="2" class="py-0 px-3">
+                <v-text-field
+                  v-model="patient.presentHistory.ph5.duration"
                   outlined
                   dense
                   label="Duration"
@@ -351,6 +416,13 @@
                   hide-details
                 ></v-checkbox>
 
+                    <v-checkbox
+                  v-model="patient.personalHistory.tobaccoChewing"
+                  label="Tobacco Chewing"
+                  color="red"
+                  hide-details
+                ></v-checkbox>
+
                 <v-text-field
                   class="py-3 my-3"
                   v-model="patient.personalHistory.sleep"
@@ -434,21 +506,25 @@ export default class Home extends Vue {
   patient: PatientInterface = new Patient();
 
   modal = false;
-  valid = true;
+  valid = false;
   snackBar = false;
   message = "";
   loading = true;
   submitLoading = false;
   nameRules = [(v: any) => !!v || "field is required"];
   pickedDate = "";
+  sex = [
+    { title: "Male", code: "M" },
+    { title: "Female", code: "F" },
+    { title: "Other", code: "O" },
+  ];
 
   get date(): string {
-   return this.pickedDate??"";
-
+    return this.pickedDate ?? "";
   }
 
   set date(date: string) {
-    console.log(date, "++++");
+    console.log(date);
     this.patient.date = new Date(date);
     this.pickedDate = date;
     console.log(this.patient.date);
@@ -468,6 +544,10 @@ export default class Home extends Vue {
       if (id) {
         const patient = await store.getPatient(id);
         this.patient = patient;
+        this.pickedDate = (patient.date.toDate() as Date)
+          .toISOString()
+          .split("T")[0];
+        console.log("Initial Date:  ", this.pickedDate);
       }
     } catch (error) {
       console.log(error);
@@ -490,9 +570,19 @@ export default class Home extends Vue {
     if (this.loading) {
       return;
     }
+    // if(!this.patient.opid || this.patient.opid==""){
+    //   this.showMessage("Field OP ID is required")
+    //   return
+    // }
+
+    if (!this.valid) {
+      this.showMessage("Please Fill all the neccessary fields");
+      return;
+    }
     this.submitLoading = true;
     try {
       if (!this.edit) {
+        this.patient.inPatient=true;
         const id = await store.addPatient(this.patient);
         console.log(id);
         if (id) {

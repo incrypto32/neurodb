@@ -6,7 +6,7 @@ import NewPatient from "../views/NewPatient.vue";
 import Success from "../views/Success.vue";
 import VitalsForm from "../views/VitalsForm.vue";
 import Login from "../views/Login.vue";
-import Meals from "../views/Meals.vue";
+import Patients from "../views/Patients.vue";
 import { fire } from "@/ts/firebase_helper";
 
 Vue.use(VueRouter);
@@ -24,7 +24,7 @@ const routes: Array<RouteConfig> = [
       {
         path: "/patients/all",
         name: "patients",
-        component: Meals,
+        component: Patients,
       },
 
       {
@@ -60,12 +60,12 @@ const routes: Array<RouteConfig> = [
       },
       {
         path: "/about",
-        name: "Meals",
+        name: "Patients",
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () =>
-          import(/* webpackChunkName: "about" */ "../views/Meals.vue"),
+          import(/* webpackChunkName: "about" */ "../views/Patients.vue"),
       },
     ],
 

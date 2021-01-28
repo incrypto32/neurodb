@@ -10,19 +10,20 @@
     </v-row>
     <div v-else>
       <v-container v-if="dataError">
-        <v-row class="justify-center align-center" >
+        <v-row class="justify-center align-center">
           <div>An error occured please try again later</div>
         </v-row>
       </v-container>
 
       <div v-else>
-        <h2>{{patient.name}}</h2>
+        <h2>{{ patient.name }}</h2>
 
         <v-row>
-          <v-col  md="2" cols="12"> Sex : {{patient.sex}}</v-col>
-          <v-col md="2" cols="12">Age : {{patient.age}}</v-col>
-          <v-col  md="2" cols="12">Room : {{patient.room}}</v-col>
-          <v-col  md="2" cols="12">Date : {{patient.date}}</v-col>
+          <v-col md="2" cols="12"> Sex : {{ patient.sex }}</v-col>
+
+          <v-col md="2" cols="12">Age : {{ patient.age }}</v-col>
+          <v-col md="2" cols="12">Room : {{ patient.room }}</v-col>
+          <v-col md="2" cols="12">Date : {{ patient.date.toDate() }}</v-col>
         </v-row>
 
         <v-row>
@@ -184,8 +185,8 @@
         <v-row>
           <v-col cols="12" md="6" class="py-0 px-3">
             <v-text-field
-              v-model="patient.cranialNerve.cerebralSign"
-              label="Cerebral Sign"
+              v-model="patient.cranialNerve.cerebellarSign"
+              label="Cerebellar Sign"
               outlined
               dense
             ></v-text-field>
@@ -195,8 +196,8 @@
         <v-row>
           <v-col cols="12" md="6" class="py-0 px-3">
             <v-text-field
-              v-model="patient.cranialNerve.cerebralSign"
-              label="Meneningeal Sign"
+              v-model="patient.cranialNerve.meningealSign"
+              label="Meningeal Sign"
               outlined
               dense
             ></v-text-field>
@@ -206,8 +207,8 @@
         <v-row>
           <v-col cols="12" md="6" class="py-0 px-3">
             <v-text-field
-              v-model="patient.cranialNerve.menengialSign"
-              label="Periferal Nerves"
+              v-model="patient.cranialNerve.peripheralNerves"
+              label="Peripheral Nerves"
               outlined
               dense
             ></v-text-field>
@@ -217,7 +218,7 @@
         <v-row>
           <v-col cols="12" md="6" class="py-0 px-3">
             <v-text-field
-              v-model="patient.cranialNerve.periferalNerves"
+              v-model="patient.cranialNerve.skullAndSpine"
               label="Skull And Spine"
               outlined
               dense
@@ -230,10 +231,9 @@
           <v-btn value="recent" v-on:click="submit(true)">
             <h3>Save</h3>
           </v-btn>
-          <v-btn value="recent"  v-on:click="submit()" >
+          <v-btn value="recent" v-on:click="submit()">
             <h3>Next</h3>
           </v-btn>
-     
         </v-bottom-navigation>
       </div>
     </div>
@@ -245,7 +245,7 @@
 <script lang="ts">
 import { store } from "@/ts/firebase_helper";
 import { Patient, PatientInterface } from "@/ts/models/models";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component({})
 export default class VitalForm extends Vue {
@@ -264,11 +264,11 @@ export default class VitalForm extends Vue {
   loading = true;
   dataError = false;
   submitLoading = false;
+  sex=["Male","Female","Other"]
   nameRules = [(v: any) => !!v || "field is required"];
 
   async created() {
     console.log("Created called");
-    const id = this.$route.params.id;
 
     await this.getPatient(this.$route.params.id);
   }
@@ -302,19 +302,19 @@ export default class VitalForm extends Vue {
   async submit(save = false) {
     this.submitLoading = true;
     try {
-     
-        const success = await store.editPatient(
-          this.$route.params.id,
-          this.patient
-        );
-        if (success) {
-          if (save) {
-            this.showMessage("Successfully saved");
-          } else {
-            this.$router.push({ path: `/patients/success/${this.$route.params.id}`});
-          }
+      const success = await store.editPatient(
+        this.$route.params.id,
+        this.patient
+      );
+      if (success) {
+        if (save) {
+          this.showMessage("Successfully saved");
+        } else {
+          this.$router.push({
+            path: `/patients/success/${this.$route.params.id}`,
+          });
         }
-      
+      }
     } catch (error) {
       console.log(error);
       this.showMessage("An error occured");
