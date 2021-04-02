@@ -67,6 +67,7 @@ export interface PatientInterface {
   };
 
   cranialNerve: {
+    cranialNerve?: string;
     motorSystem?: string;
     sensorySystem?: string;
     cerebellarSign?: string;
@@ -129,6 +130,7 @@ export class Patient implements PatientInterface {
     this.vitals={};
     this.higherMentalFunction={};
     this.cranialNerve={};
+    this.inPatient=true;
  
   }
 
@@ -163,6 +165,7 @@ export class Patient implements PatientInterface {
   };
 
   cranialNerve: {
+    cranialNerve?: string;
     motorSystem?: string;
     sensorySystem?: string;
     cerebellarSign?: string;

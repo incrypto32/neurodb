@@ -6,21 +6,33 @@ import { Patient, PatientInterface } from "../models/models";
 export class FireStoreHelper {
   store: firebase.firestore.Firestore;
   patients: firebase.firestore.CollectionReference;
+  numdata: firebase.firestore.CollectionReference;
   lastDoc!: firebase.firestore.DocumentSnapshot;
-
   increment = firebase.firestore.FieldValue.increment(1);
 
   constructor(app: any) {
     this.store = app.firestore();
     this.patients = this.store.collection("patients");
+    this.numdata = this.store.collection("numdata");
   }
 
   async addPatient(patient: Patient): Promise<string> {
-    const entryTstamp =firebase.firestore.FieldValue.serverTimestamp();
+  
     const tStamp = firebase.firestore.Timestamp.fromDate(patient.date);
-
     patient.date = tStamp;
     const doc = await this.patients.add(Object.assign({}, patient));
+
+    try {
+      await this.numdata.doc("numbers").update({
+        inPatients: firebase.firestore.FieldValue.increment(1),
+        patients: firebase.firestore.FieldValue.increment(1),
+      });
+    } catch (error) {
+      await this.patients.doc(doc.id).delete();
+      console.log(error)
+      throw "Could'nt update numbers";
+    }
+
     return doc.id;
   }
 
@@ -43,7 +55,7 @@ export class FireStoreHelper {
     console.log("Add patient files to firestore");
     console.log(`ID : ${id} , Title : ${file.title} , Name : ${file.name}`);
     try {
-     const doc= await this.patients
+      const doc = await this.patients
         .doc(id)
         .collection("files")
         .add(file);
@@ -54,7 +66,6 @@ export class FireStoreHelper {
       console.log("Error while adding patient files details to firestore");
       onError();
     }
-    
   }
 
   async getPatient(id: string): Promise<PatientInterface> {
@@ -69,22 +80,32 @@ export class FireStoreHelper {
   }
 
   async getPatientFiles(id: string) {
-    const snap = await this.patients.doc(id).collection('files').get();
+    const snap = await this.patients
+      .doc(id)
+      .collection("files")
+      .get();
     return snap.docs.map((doc) => {
-      const res=doc.data()
-      res.id=doc.id;
-      return res
+      const res = doc.data();
+      res.id = doc.id;
+      return res;
     });
   }
-  async deletePatientFile(id: string,fileId: string){
-    await this.patients.doc(id).collection('files').doc(fileId).delete();
+
+  async deletePatientFile(id: string, fileId: string) {
+    await this.patients
+      .doc(id)
+      .collection("files")
+      .doc(fileId)
+      .delete();
   }
 
   async getAllPatients(getMore = false): Promise<Array<PatientInterface>> {
     const patients: Array<PatientInterface> = [];
     let query = this.patients.orderBy("date", "desc");
 
-    if (this.lastDoc && getMore) {
+    // console.log(JSON.stringify(this.lastDoc?.data()), getMore);
+
+    if (this.lastDoc) {
       query = query.startAfter(this.lastDoc);
     }
 
@@ -107,14 +128,17 @@ export class FireStoreHelper {
         console.log(error);
       }
     });
-    console.log(JSON.stringify(patients));
 
     return patients;
   }
 
-  async deletePatient(id: string): Promise<boolean> {
+  async deletePatient(id: string, inPatient: boolean): Promise<boolean> {
     try {
       await this.patients.doc(id).delete();
+      await this.numdata.doc("numbers").update({
+        inPatients: firebase.firestore.FieldValue.increment(-1),
+        patients: firebase.firestore.FieldValue.increment(inPatient ? -1 : 0),
+      });
       return true;
     } catch (error) {
       console.log(error);
@@ -122,10 +146,15 @@ export class FireStoreHelper {
     }
   }
 
-
-  async checkInOrOut(id: string,value: boolean): Promise<boolean> {
+  async checkInOrOut(id: string, value: boolean): Promise<boolean> {
     try {
-      await this.patients.doc(id).update({inPatient:value});
+      const cTstamp = firebase.firestore.FieldValue.serverTimestamp();
+      console.log(`${id}`);
+      await this.patients.doc(id).update({ inPatient: value, cDate: cTstamp });
+      await this.numdata.doc("numbers").update({
+        inPatients: firebase.firestore.FieldValue.increment(-1),
+        patients: firebase.firestore.FieldValue.increment(value ? -1 : 0),
+      });
       return true;
     } catch (error) {
       console.log(error);

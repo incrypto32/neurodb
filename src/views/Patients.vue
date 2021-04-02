@@ -58,7 +58,7 @@
             <v-btn
               class="mx-1"
               elevation="2"
-              @click="deletePatient(item.id)"
+              @click="deletePatient(item)"
               icon
               outlined
             >
@@ -69,7 +69,7 @@
               class="mx-1"
               elevation="2"
               color="red"
-              @click="checkInOrOut(item.id, !item.inPatient)"
+              @click="checkInOrOut(item)"
               icon
               outlined
             >
@@ -80,11 +80,11 @@
               class="mx-1"
               elevation="2"
               color="green"
-              @click="checkInOrOut(item.id, !item.inPatient)"
+              @click="checkInOrOut(item)"
               icon
               outlined
             >
-              <v-icon  small> mdi-login</v-icon>
+              <v-icon small> mdi-login</v-icon>
             </v-btn>
           </v-row>
         </div>
@@ -180,7 +180,11 @@ export default class Stores extends Vue {
     this.loading = true;
     try {
       const results = await store.getAllPatients();
-      this.patients = results;
+      let pats= this.patients
+      pats=pats.concat(results)
+      // console.log(results)
+      // results = this.patients.concat(results);
+      this.patients = pats;
     } catch (error) {
       console.log(error);
     }
@@ -191,19 +195,19 @@ export default class Stores extends Vue {
     this.snackBar = true;
   }
 
-  async deletePatient(id: string) {
+  async deletePatient(patient: Patient) {
     console.log("DELTE");
-    if (await store.deletePatient(id)) {
+    if (await store.deletePatient(patient.id, patient.inPatient)) {
       this.initialize();
       this.showMessage("Successfully deleted");
     } else {
       this.showMessage("An error occured please try again");
     }
   }
-  async checkInOrOut(id: string, val: boolean) {
+  async checkInOrOut(item: any) {
     console.log("DELTE");
-    if (await store.checkInOrOut(id, val)) {
-      this.initialize();
+    if (await store.checkInOrOut(item.id, !item.inPatient)) {
+      item.inPatient = !item.inPatient;
       this.showMessage("Succesfull");
     } else {
       this.showMessage("An error occured please try again");
