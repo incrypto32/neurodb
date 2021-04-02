@@ -180,11 +180,8 @@ export default class Stores extends Vue {
     this.loading = true;
     try {
       const results = await store.getAllPatients();
-      let pats= this.patients
-      pats=pats.concat(results)
-      // console.log(results)
-      // results = this.patients.concat(results);
-      this.patients = pats;
+     
+      this.patients = results;
     } catch (error) {
       console.log(error);
     }
