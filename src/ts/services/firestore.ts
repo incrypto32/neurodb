@@ -17,7 +17,6 @@ export class FireStoreHelper {
   }
 
   async addPatient(patient: Patient): Promise<string> {
-  
     const tStamp = firebase.firestore.Timestamp.fromDate(patient.date);
     patient.date = tStamp;
     const doc = await this.patients.add(Object.assign({}, patient));
@@ -29,7 +28,7 @@ export class FireStoreHelper {
       });
     } catch (error) {
       await this.patients.doc(doc.id).delete();
-      console.log(error)
+      console.log(error);
       throw "Could'nt update numbers";
     }
 
@@ -99,19 +98,19 @@ export class FireStoreHelper {
       .delete();
   }
 
-  async getAllPatients(getMore = false): Promise<Array<PatientInterface>> {
+  async getAllPatients(limit = 20): Promise<Array<PatientInterface>> {
     const patients: Array<PatientInterface> = [];
     let query = this.patients.orderBy("date", "desc");
 
     // console.log(JSON.stringify(this.lastDoc?.data()), getMore);
 
-    if (this.lastDoc) {
-      query = query.startAfter(this.lastDoc);
-    }
+    // if (this.lastDoc) {
+    //   query = query.startAfter(this.lastDoc);
+    // }
 
-    query = query.limit(20);
+    query = query.limit(limit);
     const snap = await query.get();
-    this.lastDoc = snap.docs[snap.docs.length - 1];
+    // this.lastDoc = snap.docs[snap.docs.length - 1];
 
     snap.docs.forEach((doc) => {
       try {
@@ -129,6 +128,8 @@ export class FireStoreHelper {
       }
     });
 
+    console.log(patients);
+
     return patients;
   }
 
@@ -136,8 +137,8 @@ export class FireStoreHelper {
     try {
       await this.patients.doc(id).delete();
       await this.numdata.doc("numbers").update({
-        inPatients: firebase.firestore.FieldValue.increment(-1),
-        patients: firebase.firestore.FieldValue.increment(inPatient ? -1 : 0),
+        inPatients: firebase.firestore.FieldValue.increment(inPatient ? -1 : 0),
+        patients: firebase.firestore.FieldValue.increment(-1),
       });
       return true;
     } catch (error) {
@@ -151,9 +152,10 @@ export class FireStoreHelper {
       const cTstamp = firebase.firestore.FieldValue.serverTimestamp();
       console.log(`${id}`);
       await this.patients.doc(id).update({ inPatient: value, cDate: cTstamp });
+
+      console.log(value);
       await this.numdata.doc("numbers").update({
-        inPatients: firebase.firestore.FieldValue.increment(-1),
-        patients: firebase.firestore.FieldValue.increment(value ? -1 : 0),
+        inPatients: firebase.firestore.FieldValue.increment(value ? 1 : -1),
       });
       return true;
     } catch (error) {

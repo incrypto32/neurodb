@@ -6,8 +6,7 @@
       :loading="loading"
       loading-text="Loading .. Please wait"
       :search="search"
-      :page.sync="page"
-      :items-per-page="itemsPerPage"
+      :disable-pagination="true"
       hide-default-footer
       class="elevation-1"
     >
@@ -25,7 +24,9 @@
           <v-spacer></v-spacer>
         </v-toolbar>
       </template>
-
+      <template v-slot:[`item.rank`]="{ item }">
+        {{ patients.indexOf(item) + 1 }}
+      </template>
       <template v-slot:[`item.action`]="{ item }">
         <v-btn
           :color="item.closed ? 'success' : 'error'"
@@ -128,6 +129,7 @@ export default class Stores extends Vue {
   pageCount = 1;
 
   headers: object[] = [
+    { text: "Sl No", value: "rank" },
     {
       text: "Name",
       align: "start",
@@ -177,14 +179,15 @@ export default class Stores extends Vue {
   }
 
   async initialize() {
+    const limit = this.patients.length + 20;
     this.loading = true;
     try {
-      const results = await store.getAllPatients();
-     
-      this.patients = results;
+      const res = await store.getAllPatients(limit);
+      this.patients = res;
     } catch (error) {
       console.log(error);
     }
+    this.$forceUpdate();
     this.loading = false;
   }
   showMessage(msg: string) {
