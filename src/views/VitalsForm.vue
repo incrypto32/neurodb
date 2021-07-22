@@ -45,7 +45,7 @@
               dense
               label="BP"
               color="grey"
-              suffix="Mm of Hg"
+              suffix="mmHg"
               required
             ></v-text-field>
 
