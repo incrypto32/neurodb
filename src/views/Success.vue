@@ -89,6 +89,12 @@
                       truncate-length="15"
                     ></v-file-input>
                   </v-row>
+                  <v-progress-linear
+                    color="light-blue"
+                    height="10"
+                    :value="fileUploadPercentage"
+                    striped
+                  ></v-progress-linear>
                 </v-container>
               </v-card-text>
 
@@ -117,6 +123,7 @@ export default class Home extends Vue {
   uploadContent: any = {};
   patientFiles: Array<any> = [];
   patienFilesLoading = false;
+  fileUploadPercentage = 0;
 
   setFilesLoading(val: boolean) {
     this.patienFilesLoading = val;
@@ -155,6 +162,7 @@ export default class Home extends Vue {
         uploadFileName,
         (percent) => {
           console.log(`Percent : ${percent}`);
+          this.fileUploadPercentage = percent;
         },
         (err) => {
           console.log("Error while uploading to fire storage");
@@ -189,6 +197,7 @@ export default class Home extends Vue {
               this.setFilesLoading(false);
             }
           );
+          this.fileUploadPercentage = 0;
         }
       );
     }

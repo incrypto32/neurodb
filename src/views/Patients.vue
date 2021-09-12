@@ -8,6 +8,7 @@
       :search="search"
       :disable-pagination="true"
       hide-default-footer
+      dense
       class="elevation-1"
     >
       <template v-slot:top>
@@ -44,52 +45,71 @@
         {{ item.inPatient }}
       </template>
 
-      <template v-slot:[`item.actions`]="{ item }">
-        <div class="px-4">
-          <v-row justify="center">
-            <v-btn
-              class="mx-1"
-              elevation="2"
-              :to="`/patients/edit/${item.id}`"
-              icon
-              outlined
-            >
-              <v-icon small> mdi-pencil</v-icon>
-            </v-btn>
-            <v-btn
-              class="mx-1"
-              elevation="2"
-              @click="deletePatient(item)"
-              icon
-              outlined
-            >
-              <v-icon small> mdi-delete</v-icon>
-            </v-btn>
-            <v-btn
-              v-if="item.inPatient == true"
-              class="mx-1"
-              elevation="2"
-              color="red"
-              @click="checkInOrOut(item)"
-              icon
-              outlined
-            >
-              <v-icon small> mdi-logout</v-icon>
-            </v-btn>
-            <v-btn
-              v-else
-              class="mx-1"
-              elevation="2"
-              color="green"
-              @click="checkInOrOut(item)"
-              icon
-              outlined
-            >
-              <v-icon small> mdi-login</v-icon>
-            </v-btn>
-          </v-row>
-        </div>
+      <template v-slot:[`item.edit`]="{ item }">
+        <v-btn elevation="2" :to="`/patients/edit/${item.id}`" icon small>
+          <v-icon small> mdi-pencil</v-icon>
+        </v-btn>
       </template>
+
+      <template v-slot:[`item.delete`]="{ item }">
+        <v-btn elevation="2" @click="deletePatient(item)" icon small>
+          <v-icon small> mdi-delete</v-icon>
+        </v-btn>
+      </template>
+
+      <template v-slot:[`item.checkinout`]="{ item }">
+        <v-btn
+          v-if="item.inPatient == true"
+          elevation="2"
+          color="red"
+          @click="checkInOrOut(item)"
+          icon
+          small
+        >
+          <v-icon small> mdi-logout</v-icon>
+        </v-btn>
+        <v-btn
+          v-else
+          elevation="2"
+          color="green"
+          @click="checkInOrOut(item)"
+          icon
+          small
+        >
+          <v-icon small> mdi-login</v-icon>
+        </v-btn>
+      </template>
+<!-- 
+      <template v-slot:[`item.actions`]="{ item }">
+        <div>
+          <v-btn elevation="2" :to="`/patients/edit/${item.id}`" icon small>
+            <v-icon small> mdi-pencil</v-icon>
+          </v-btn>
+          <v-btn elevation="2" @click="deletePatient(item)" icon small>
+            <v-icon small> mdi-delete</v-icon>
+          </v-btn>
+          <v-btn
+            v-if="item.inPatient == true"
+            elevation="2"
+            color="red"
+            @click="checkInOrOut(item)"
+            icon
+            small
+          >
+            <v-icon small> mdi-logout</v-icon>
+          </v-btn>
+          <v-btn
+            v-else
+            elevation="2"
+            color="green"
+            @click="checkInOrOut(item)"
+            icon
+            small
+          >
+            <v-icon small> mdi-login</v-icon>
+          </v-btn>
+        </div>
+      </template> -->
       <template v-slot:no-data>
         <v-container pa-3></v-container>
         <v-btn color="primary" @click="initialize"> Retry </v-btn>
@@ -131,6 +151,16 @@ export default class Stores extends Vue {
   headers: object[] = [
     { text: "Sl No", value: "rank" },
     {
+      text: "OPID",
+      align: "start",
+      value: "opid",
+    },
+      {
+      text: "Room No",
+      align: "start",
+      value: "room",
+    },
+    {
       text: "Name",
       align: "start",
       value: "name",
@@ -168,10 +198,25 @@ export default class Stores extends Vue {
       value: "inPatient",
     },
     {
-      text: "Action",
+      text: "Edit",
       align: "center",
-      value: "actions",
+      value: "edit",
     },
+    {
+      text: "Delete",
+      align: "center",
+      value: "delete",
+    },
+    {
+      text: "Admit / Discharge",
+      align: "center",
+      value: "checkinout",
+    },
+    // {
+    //   text: "Action",
+    //   align: "center",
+    //   value: "actions",
+    // },
   ];
 
   created() {
